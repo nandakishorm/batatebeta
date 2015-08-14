@@ -1,4 +1,4 @@
-package batatebeta;
+package com.kishor.batatebeta;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
