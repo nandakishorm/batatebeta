@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by Nandakishor on 8/12/2015.
  */
@@ -20,12 +22,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User entity) throws BatateException {
-        return null;
+        return userRepository.save(entity);
     }
 
     @Override
     public User update(User entity) throws BatateException {
-        return null;
+        return userRepository.save(entity);
     }
 
     @Override
@@ -34,8 +36,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findAll() throws BatateException {
-        return null;
+    public List<User> findAll() {
+        return (List<User>) userRepository.findAll();
     }
 
 }
