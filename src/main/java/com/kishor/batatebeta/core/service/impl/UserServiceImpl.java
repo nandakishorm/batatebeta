@@ -3,6 +3,7 @@ package com.kishor.batatebeta.core.service.impl;
 import com.kishor.batatebeta.core.domain.User;
 import com.kishor.batatebeta.core.repository.UserRepository;
 import com.kishor.batatebeta.core.service.UserService;
+import com.kishor.batatebeta.exception.BatateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,22 +19,23 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User create(User entity) {
+    public User create(User entity) throws BatateException {
         return null;
     }
 
     @Override
-    public User update(User entity) {
+    public User update(User entity) throws BatateException {
         return null;
     }
 
     @Override
-    public User findByUid(String uid) {
+    public User findByUid(String uid) throws BatateException {
         return null;
     }
 
     @Override
-    public User findAll() {
+    public User findAll() throws BatateException {
         return null;
     }
+
 }
