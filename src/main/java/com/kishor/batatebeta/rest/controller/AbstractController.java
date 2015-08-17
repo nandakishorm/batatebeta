@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class AbstractController {
 
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
 //    public User whoAmI() throws BatateException {
 //        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
