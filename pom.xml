@@ -78,6 +78,12 @@
             <artifactId>spring-hateoas</artifactId>
             <version>0.18.0.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
         <!--THESE DEPENDENCIES WERE ADDED BY ME++++++++++++END-->
 	</dependencies>
 	
