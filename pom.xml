@@ -47,6 +47,11 @@
 
         <!--THESE DEPENDENCIES WERE ADDED BY ME++++++++++++BEGIN-->
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>2.3.9</version>
