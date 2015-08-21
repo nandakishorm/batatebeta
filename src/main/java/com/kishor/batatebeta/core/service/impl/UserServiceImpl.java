@@ -44,6 +44,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByUsername(String username) throws BatateException {
+        Preconditions.checkNotNull(username, MessageDictionary.VALUE_IS_NULL);
+        User user = userRepository.findByUserName(username);
+        return user;
+    }
+
+    @Override
     public List<User> findAll() {
         return (List<User>) userRepository.findAll();
     }

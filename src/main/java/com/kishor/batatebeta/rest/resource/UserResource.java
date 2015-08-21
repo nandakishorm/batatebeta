@@ -11,6 +11,8 @@ public class UserResource extends BaseResource {
 
     private String fullName;
 
+    private String role;
+
     public UserResource()
     {}
 
@@ -36,5 +38,13 @@ public class UserResource extends BaseResource {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

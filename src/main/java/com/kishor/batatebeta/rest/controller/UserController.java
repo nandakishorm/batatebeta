@@ -9,6 +9,9 @@ import com.kishor.batatebeta.rest.resource.assembler.UserResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +36,7 @@ public class UserController {
     private UserResourceAssembler userResourceAssembler;
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyRole('USER', 'ADMINISTRATOR')")
     @ResponseBody
     public ResponseEntity<UserResource> create(@RequestBody UserResource userResource) throws BatateException {
         User user = userAssembler.toEntity(userResource);
@@ -42,6 +46,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
+    @PreAuthorize("hasAnyRole('USER', 'ADMINISTRATOR')")
     @ResponseBody
     public ResponseEntity<UserResource> update(@RequestBody UserResource userResource) throws BatateException {
         User user = userAssembler.toEntity(userResource);
@@ -51,10 +56,20 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('USER', 'ADMINISTRATOR')")
     @ResponseBody
     public ResponseEntity<List<UserResource>> findByStatus() throws BatateException {
         List<User> users = userService.findAll();
         List<UserResource> userResources = userResourceAssembler.toResources(users);
         return new ResponseEntity<>(userResources, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/me", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<UserResource> findMe() throws BatateException {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        UserResource userResource = userResourceAssembler.toResource(user);
+        return new ResponseEntity<>(userResource, HttpStatus.OK);
     }
 }
