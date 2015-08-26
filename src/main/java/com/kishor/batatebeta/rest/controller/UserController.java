@@ -1,5 +1,6 @@
 package com.kishor.batatebeta.rest.controller;
 
+import com.kishor.batatebeta.core.dictionary.Role;
 import com.kishor.batatebeta.core.domain.User;
 import com.kishor.batatebeta.core.service.UserService;
 import com.kishor.batatebeta.exception.BatateException;
@@ -54,11 +55,29 @@ public class UserController {
         return new ResponseEntity<>(userResource, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('USER', 'ADMINISTRATOR')")
+    @RequestMapping(value = "/users/all", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
     @ResponseBody
-    public ResponseEntity<List<UserResource>> findByStatus() throws BatateException {
+    public ResponseEntity<List<UserResource>> findAll() throws BatateException {
         List<User> users = userService.findAll();
+        List<UserResource> userResources = userResourceAssembler.toResources(users);
+        return new ResponseEntity<>(userResources, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('USER')")
+    @ResponseBody
+    public ResponseEntity<List<UserResource>> findUsers() throws BatateException {
+        List<User> users = userService.findByRole(Role.USER);
+        List<UserResource> userResources = userResourceAssembler.toResources(users);
+        return new ResponseEntity<>(userResources, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admins", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @ResponseBody
+    public ResponseEntity<List<UserResource>> findAdmins() throws BatateException {
+        List<User> users = userService.findByRole(Role.ADMINISTRATOR);
         List<UserResource> userResources = userResourceAssembler.toResources(users);
         return new ResponseEntity<>(userResources, HttpStatus.OK);
     }

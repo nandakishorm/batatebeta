@@ -2,6 +2,7 @@ package com.kishor.batatebeta.core.service.impl;
 
 import com.google.common.base.Preconditions;
 import com.kishor.batatebeta.core.dictionary.MessageDictionary;
+import com.kishor.batatebeta.core.dictionary.Role;
 import com.kishor.batatebeta.core.domain.User;
 import com.kishor.batatebeta.core.repository.UserRepository;
 import com.kishor.batatebeta.core.service.UserService;
@@ -50,6 +51,12 @@ public class UserServiceImpl implements UserService {
         Preconditions.checkNotNull(username, MessageDictionary.VALUE_IS_NULL);
         User user = userRepository.findByUserName(username);
         return user;
+    }
+
+    @Override
+    public List<User> findByRole(Role role) throws BatateException {
+        Preconditions.checkNotNull(role, MessageDictionary.VALUE_IS_NULL);
+        return userRepository.findByRole(role);
     }
 
     @Override
