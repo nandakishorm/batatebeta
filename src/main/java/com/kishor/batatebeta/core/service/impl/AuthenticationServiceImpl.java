@@ -4,6 +4,8 @@ import com.kishor.batatebeta.core.domain.User;
 import com.kishor.batatebeta.core.repository.UserRepository;
 import com.kishor.batatebeta.core.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private UserRepository userRepository;
 
     @Override
+//    @Cacheable(value = "userCache")
+    @CacheEvict(value = {"userCache", "usersCache"}, allEntries = true, beforeInvocation = false)
     public User findByUsername(String username) {
         return userRepository.findByUserName(username);
     }

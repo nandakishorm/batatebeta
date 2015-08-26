@@ -7,6 +7,7 @@ import com.kishor.batatebeta.core.repository.UserRepository;
 import com.kishor.batatebeta.core.service.UserService;
 import com.kishor.batatebeta.exception.BatateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "userCache")
     public User findByUsername(String username) throws BatateException {
         Preconditions.checkNotNull(username, MessageDictionary.VALUE_IS_NULL);
         User user = userRepository.findByUserName(username);

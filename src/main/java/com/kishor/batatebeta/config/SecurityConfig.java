@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @ComponentScan(basePackages = "com.kishor.batatebeta.auth", scopedProxy = ScopedProxyMode.INTERFACES)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -28,6 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService);
+//        authenticationManagerBuilder
+//                .inMemoryAuthentication()
+//                .withUser("user")
+//                .password("password")
+//                .roles("USER");
     }
 
     protected void configure(HttpSecurity httpSecurity) throws Exception {
