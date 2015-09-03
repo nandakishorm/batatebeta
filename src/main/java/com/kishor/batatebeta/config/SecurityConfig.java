@@ -28,16 +28,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService);
-//        authenticationManagerBuilder
-//                .inMemoryAuthentication()
-//                .withUser("user")
-//                .password("password")
-//                .roles("USER");
+
+        /*authenticationManagerBuilder.inMemoryAuthentication().withUser("user").password("user").roles("USER");
+        authenticationManagerBuilder.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+        authenticationManagerBuilder.inMemoryAuthentication().withUser("kishor").password("kishor").roles("KISHOR");*/
     }
 
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests().anyRequest().fullyAuthenticated();
+        httpSecurity
+                .authorizeRequests().anyRequest().fullyAuthenticated()
+                .and()
+                .formLogin()
+                .and()
+                .logout().invalidateHttpSession(true).logoutUrl("/applogout");
+
         httpSecurity.httpBasic();
         httpSecurity.csrf().disable();
+
+        /*httpSecurity.authorizeRequests()
+                .antMatchers("/users*//**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/admins*//**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_KISHOR')")
+                .and().formLogin();*/
     }
 }

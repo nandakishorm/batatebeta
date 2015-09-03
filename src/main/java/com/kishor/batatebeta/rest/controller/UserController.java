@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/all", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'ROLE_KISHOR')")
     @ResponseBody
     public ResponseEntity<List<UserResource>> findAll() throws BatateException {
         List<User> users = userService.findAll();
