@@ -6,5 +6,6 @@ package com.kishor.batatebeta.core.dictionary;
 public enum Status {
     Active,
     Inactive,
-    Blocked
+    Blocked,
+    Deleted
 }

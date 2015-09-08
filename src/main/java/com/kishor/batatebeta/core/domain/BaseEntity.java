@@ -19,7 +19,7 @@ public abstract class BaseEntity implements Serializable {
     @Basic(fetch = FetchType.EAGER)
     protected Long id;
 
-    @Column(name = "status", nullable = false, columnDefinition = "ENUM('Active', 'Inactive', 'Blocked') default 'Active'")
+    @Column(name = "status", nullable = false, columnDefinition = "ENUM('Active', 'Inactive', 'Blocked', 'Deleted') default 'Active'")
     @Enumerated(EnumType.STRING)
     private Status status;
 
