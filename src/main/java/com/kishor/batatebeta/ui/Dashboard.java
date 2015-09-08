@@ -1,26 +1,55 @@
 package com.kishor.batatebeta.ui;
 
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Created by Nandakishor on 8/10/2015.
  */
+
+@SpringComponent
+@Scope("prototype")
 public class Dashboard extends VerticalLayout {
+
+    @Autowired
+    private UserLayout userLayout;
+
+    Button btnUser, btnAccount;
+    Panel pnlDetailView;
+    VerticalLayout vlDetailViewContainer;
+    HorizontalLayout hlHeader, hlComponentContainer;
 
     public Dashboard() {
         setSizeFull();
-        configureLayouts();
+        setCaption("New User");
+        layoutsInit();
+        configureComponentListeners();
     }
 
-    private void configureLayouts() {
+    private void configureComponentListeners() {
 
-        Button btnUser = new NativeButton("Users");
+        Button.ClickListener clickListener = clickEvent -> {
+            if (clickEvent.getButton().getCaption().equalsIgnoreCase("users")) {
+                pnlDetailView.setContent(userLayout);
+            } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("accounts")) {
+
+            }
+        };
+        btnUser.addClickListener(clickListener);
+        btnAccount.addClickListener(clickListener);
+    }
+
+    private void layoutsInit() {
+
+        btnUser = new NativeButton("Users");
         btnUser.setWidth("100%");
         btnUser.setHeight(70, Unit.PIXELS);
 //        btnUser.setWidth(150, Unit.PIXELS);
 
-        Button btnAccount = new NativeButton("Accounts");
+        btnAccount = new NativeButton("Accounts");
         btnAccount.setWidth("100%");
         btnAccount.setHeight(70, Unit.PIXELS);
 //        btnAccount.setWidth(150, Unit.PIXELS);
@@ -31,21 +60,21 @@ public class Dashboard extends VerticalLayout {
         VerticalLayout vlButtonContainer = new VerticalLayout(vlButtonContainerSubSet);
         vlButtonContainer.setSizeFull();
 
-        VerticalLayout vlDetailViewContainer = new VerticalLayout();
+        vlDetailViewContainer = new VerticalLayout();
         vlDetailViewContainer.setSizeFull();
 
-        HorizontalLayout hlHeader = new HorizontalLayout(
+        hlHeader = new HorizontalLayout(
                 new Label("<h1>Header Contents</h1>", ContentMode.HTML)
         );
 
-        HorizontalLayout hlComponentContainer = new HorizontalLayout();
+        hlComponentContainer = new HorizontalLayout();
         hlComponentContainer.setSizeFull();
         hlComponentContainer.addComponent(vlButtonContainer);
         hlComponentContainer.addComponent(vlDetailViewContainer);
         hlComponentContainer.setExpandRatio(vlButtonContainer, 0.08f);
         hlComponentContainer.setExpandRatio(vlDetailViewContainer, 0.92f);
 
-        Panel pnlDetailView = new Panel();
+        pnlDetailView = new Panel();
         pnlDetailView.setSizeFull();
         vlDetailViewContainer.addComponent(pnlDetailView);
 
