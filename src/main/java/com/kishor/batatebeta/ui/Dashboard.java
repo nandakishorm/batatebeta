@@ -6,6 +6,8 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created by Nandakishor on 8/10/2015.
  */
@@ -15,14 +17,15 @@ import org.springframework.context.annotation.Scope;
 public class Dashboard extends VerticalLayout {
 
     @Autowired
-    private UserLayout userLayout;
+    private UserViewLayout userViewLayout;
 
     Button btnUser, btnAccount;
     Panel pnlDetailView;
     VerticalLayout vlDetailViewContainer;
     HorizontalLayout hlHeader, hlComponentContainer;
 
-    public Dashboard() {
+    @PostConstruct
+    public void uiInit() {
         setSizeFull();
         setCaption("New User");
         layoutsInit();
@@ -33,7 +36,7 @@ public class Dashboard extends VerticalLayout {
 
         Button.ClickListener clickListener = clickEvent -> {
             if (clickEvent.getButton().getCaption().equalsIgnoreCase("users")) {
-                pnlDetailView.setContent(userLayout);
+                pnlDetailView.setContent(userViewLayout);
             } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("accounts")) {
 
             }

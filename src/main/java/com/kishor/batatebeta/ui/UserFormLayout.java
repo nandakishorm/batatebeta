@@ -13,13 +13,15 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created by Nandakishor on 9/4/2015.
  */
 
 @SpringComponent
 @Scope("prototype")
-public class UserLayout extends VerticalLayout {
+public class UserFormLayout extends VerticalLayout {
 
     @Autowired
     private UserService userService;
@@ -29,14 +31,17 @@ public class UserLayout extends VerticalLayout {
     private PasswordField pasPassword;
     private ComboBox cmbRole, cmbStatus;
 
-    public UserLayout() {
-        userLayoutInit();
+    public UserFormLayout() {
+    }
+
+    @PostConstruct
+    public void uiInit() {
+        userFormLayoutInit();
         configureComponentListeners();
         setSizeFull();
     }
 
     private void configureComponentListeners() {
-
         Button.ClickListener clickListener = clickEvent -> {
             try {
                 if (clickEvent.getButton().getCaption().equalsIgnoreCase("save")) {
@@ -46,9 +51,10 @@ public class UserLayout extends VerticalLayout {
                     user.setPassword(pasPassword.getValue());
                     user.setStatus(Status.valueOf(cmbStatus.getValue().toString()));
                     user.setRole(Role.valueOf(cmbRole.getValue().toString()));
-                    userService.create(user);
+                    user = userService.create(user);
+                    Notification.show("New user was created successfully");
                 } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("reset")) {
-
+                    resetForm();
                 }
             } catch (BatateException be) {
                 be.printStackTrace();
@@ -58,7 +64,7 @@ public class UserLayout extends VerticalLayout {
         btnReset.addClickListener(clickListener);
     }
 
-    private void userLayoutInit() {
+    private void userFormLayoutInit() {
         txtFullName = new BatateTextField("FullName");
         txtUserName = new BatateTextField("UserName");
         pasPassword = new PasswordField("Password");
@@ -78,10 +84,31 @@ public class UserLayout extends VerticalLayout {
         flUserLayout.setSizeFull();
         HorizontalLayout hlButtons = new HorizontalLayout(btnSave, btnReset);
         hlButtons.setSpacing(true);
-        FormLayout flFormContainer = new FormLayout(flUserLayout, hlButtons);
-        flFormContainer.setWidth("25%");
+
+        HorizontalLayout hlButtonsOuter = new HorizontalLayout(hlButtons);
+        hlButtonsOuter.setWidth("100%");
+        hlButtonsOuter.setComponentAlignment(hlButtons, Alignment.MIDDLE_RIGHT);
+
+        FormLayout flFormContainer = new FormLayout(flUserLayout, hlButtonsOuter);
+        flFormContainer.setWidth("75%");
+
         addComponent(flFormContainer);
+        setComponentAlignment(flFormContainer, Alignment.TOP_CENTER);
     }
 
+    public void loadRecord(User user) {
+        txtFullName.setValue(user.getFullName());
+        txtUserName.setValue(user.getUserName());
+        pasPassword.setInputPrompt("xxxx");
+        cmbRole.setValue(user.getRole());
+        cmbStatus.setValue(user.getStatus());
+    }
 
+    public void resetForm() {
+        txtFullName.setValue("");
+        txtUserName.setValue("");
+        pasPassword.setInputPrompt("xxxx");
+        cmbRole.setValue(null);
+        cmbStatus.setValue(null);
+    }
 }
