@@ -13,5 +13,7 @@ public interface AbstractService<T extends Serializable> {
 
     T update(T entity) throws BatateException;
 
+    T delete(T entity) throws BatateException;
+
     T findByUid(String uid) throws BatateException;
 }

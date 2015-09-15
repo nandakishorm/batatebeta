@@ -3,6 +3,7 @@ package com.kishor.batatebeta.core.service.impl;
 import com.google.common.base.Preconditions;
 import com.kishor.batatebeta.core.dictionary.MessageDictionary;
 import com.kishor.batatebeta.core.dictionary.Role;
+import com.kishor.batatebeta.core.dictionary.Status;
 import com.kishor.batatebeta.core.domain.User;
 import com.kishor.batatebeta.core.repository.UserRepository;
 import com.kishor.batatebeta.core.service.UserService;
@@ -34,12 +35,22 @@ public class UserServiceImpl implements UserService {
     public User update(User entity) throws BatateException {
         Preconditions.checkNotNull(entity, MessageDictionary.OBJECT_IS_NULL);
         Preconditions.checkNotNull(entity.getUid(), MessageDictionary.OBJECT_ID_IS_NULL);
+        entity = findByUid(entity.getUid());
+        return userRepository.save(entity);
+    }
+
+    public User delete(User entity) throws BatateException {
+        Preconditions.checkNotNull(entity, MessageDictionary.VALUE_IS_NULL);
+        Preconditions.checkNotNull(entity.getUid(), MessageDictionary.OBJECT_ID_IS_NULL);
+        entity = findByUid(entity.getUid());
+        entity.setStatus(Status.Deleted);
         return userRepository.save(entity);
     }
 
     @Override
     public User findByUid(String uid) throws BatateException {
         Preconditions.checkNotNull(uid, MessageDictionary.VALUE_IS_NULL);
+        Preconditions.checkArgument(!uid.isEmpty(), MessageDictionary.VALUE_IS_EMPTY);
         User user = userRepository.findByUid(uid);
         Preconditions.checkNotNull(user, MessageDictionary.ENTITY_WAS_NOT_FOUND);
         return user;
@@ -49,6 +60,7 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "userCache")
     public User findByUsername(String username) throws BatateException {
         Preconditions.checkNotNull(username, MessageDictionary.VALUE_IS_NULL);
+        Preconditions.checkArgument(!username.isEmpty(), MessageDictionary.VALUE_IS_EMPTY);
         User user = userRepository.findByUserName(username);
         return user;
     }
@@ -61,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findByStatusNot(Status.Deleted);
     }
 
 }

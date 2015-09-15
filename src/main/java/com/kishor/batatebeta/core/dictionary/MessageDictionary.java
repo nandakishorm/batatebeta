@@ -9,4 +9,5 @@ public class MessageDictionary {
     public static final String ENTITY_WAS_NOT_FOUND = "Entity was not found in the database";
     public static final String OBJECT_ID_IS_NULL = "Object Id is null";
     public static final String VALUE_IS_NULL = "Provided value is null";
+    public static final String VALUE_IS_EMPTY = "Provided value is empty";
 }

@@ -2,6 +2,7 @@ package com.kishor.batatebeta.ui;
 
 import com.kishor.batatebeta.core.domain.User;
 import com.kishor.batatebeta.core.service.UserService;
+import com.kishor.batatebeta.exception.BatateException;
 import com.kishor.batatebeta.ui.extededComponents.BatateButton;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
@@ -50,8 +51,8 @@ public class UserViewLayout extends VerticalLayout {
             @Override
             public void itemClick(ItemClickEvent itemClickEvent) {
                 Object selectedMemberRow = itemClickEvent.getItemId();
-                if(itemClickEvent.isDoubleClick()){
-                    if(selectedMemberRow != null){
+                if (itemClickEvent.isDoubleClick()) {
+                    if (selectedMemberRow != null) {
                         Object selectedRow = itemClickEvent.getItemId();
                         winUserFormContainer = new Window("Update User");
                         winUserFormContainer.setWidth("50%");
@@ -69,29 +70,38 @@ public class UserViewLayout extends VerticalLayout {
         };
 
         Button.ClickListener buttonClickListener = clickEvent -> {
-            if(clickEvent.getButton().getCaption().equalsIgnoreCase("new")) {
-                winUserFormContainer = new Window("New User");
-                winUserFormContainer.setWidth("50%");
-                winUserFormContainer.setHeight("40%");
-                winUserFormContainer.setModal(true);
-                userFormLayout.removeAllComponents();
-                userFormLayout.uiInit();
-                winUserFormContainer.setContent(userFormLayout);
-                UI.getCurrent().addWindow(winUserFormContainer);
-                winUserFormContainer.addCloseListener(windowCloseListener);
-            }
-            else if(clickEvent.getButton().getCaption().equalsIgnoreCase("update")) {
-                Object selectedRow = tblUser.getValue();
-                winUserFormContainer = new Window("Update User");
-                winUserFormContainer.setWidth("50%");
-                winUserFormContainer.setHeight("40%");
-                winUserFormContainer.setModal(true);
-                userFormLayout.removeAllComponents();
-                userFormLayout.uiInit();
-                userFormLayout.loadRecord((User) selectedRow);
-                winUserFormContainer.setContent(userFormLayout);
-                UI.getCurrent().addWindow(winUserFormContainer);
-                winUserFormContainer.addCloseListener(windowCloseListener);
+            try {
+                if (clickEvent.getButton().getCaption().equalsIgnoreCase("new")) {
+                    winUserFormContainer = new Window("New User");
+                    winUserFormContainer.setWidth("50%");
+                    winUserFormContainer.setHeight("40%");
+                    winUserFormContainer.setModal(true);
+                    userFormLayout.removeAllComponents();
+                    userFormLayout.uiInit();
+                    winUserFormContainer.setContent(userFormLayout);
+                    UI.getCurrent().addWindow(winUserFormContainer);
+                    winUserFormContainer.addCloseListener(windowCloseListener);
+                } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("update")) {
+                    Object selectedRow = tblUser.getValue();
+                    winUserFormContainer = new Window("Update User");
+                    winUserFormContainer.setWidth("50%");
+                    winUserFormContainer.setHeight("40%");
+                    winUserFormContainer.setModal(true);
+                    userFormLayout.removeAllComponents();
+                    userFormLayout.uiInit();
+                    userFormLayout.loadRecord((User) selectedRow);
+                    winUserFormContainer.setContent(userFormLayout);
+                    UI.getCurrent().addWindow(winUserFormContainer);
+                    winUserFormContainer.addCloseListener(windowCloseListener);
+                } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("update")) {
+                    Object selectedRow = tblUser.getValue();
+                    userService.delete((User) selectedRow);
+                    Notification.show("Record was successfully deleted");
+                }
+            } catch (BatateException be) {
+                Notification.show("Error", be.getLocalizedMessage(), Notification.Type.ERROR_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         };
 
@@ -101,6 +111,7 @@ public class UserViewLayout extends VerticalLayout {
         btnUserUpdate.addClickListener(buttonClickListener);
         btnUserDelete.addClickListener(buttonClickListener);
     }
+
 
     private void reloadTable() {
 //        BeanItemContainer<User> userBeanItemContainer = new BeanItemContainer<>(User.class);
