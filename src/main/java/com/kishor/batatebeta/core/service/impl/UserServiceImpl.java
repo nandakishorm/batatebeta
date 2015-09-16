@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         Preconditions.checkNotNull(entity, MessageDictionary.VALUE_IS_NULL);
         Preconditions.checkNotNull(entity.getUid(), MessageDictionary.OBJECT_ID_IS_NULL);
         entity = findByUid(entity.getUid());
-        entity.setStatus(Status.Deleted);
+        entity.setStatus(Status.DELETED);
         return userRepository.save(entity);
     }
 
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return userRepository.findByStatusNot(Status.Deleted);
+        return userRepository.findByStatusNot(Status.DELETED);
     }
 
 }

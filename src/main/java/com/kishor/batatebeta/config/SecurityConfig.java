@@ -27,6 +27,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+
+        //IN-MEMORY AUTHENTICATION FOR THE FIRST TIME LOGIN
+        authenticationManagerBuilder.inMemoryAuthentication().withUser("batateinit").password("batate123").roles("ADMINISTRATOR");
+
+        // AUTHENTICATION CHECK, AFTER THE CREATION OF USER RECORDS IN THE DATABASE
         authenticationManagerBuilder.userDetailsService(userDetailsService);
 
         /*authenticationManagerBuilder.inMemoryAuthentication().withUser("user").password("user").roles("USER");

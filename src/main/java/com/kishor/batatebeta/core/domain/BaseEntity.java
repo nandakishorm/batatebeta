@@ -19,7 +19,7 @@ public abstract class BaseEntity implements Serializable {
     @Basic(fetch = FetchType.EAGER)
     protected Long id;
 
-    @Column(name = "status", nullable = false, columnDefinition = "ENUM('Active', 'Inactive', 'Blocked', 'Deleted') default 'Active'")
+    @Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'INACTIVE', 'BLOCKED', 'DELETED') default 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -55,6 +55,6 @@ public abstract class BaseEntity implements Serializable {
     {
         this.uid = UUID.randomUUID().toString();
         if(this.status == null)
-            this.status = Status.Active;
+            this.status = Status.ACTIVE;
     }
 }
