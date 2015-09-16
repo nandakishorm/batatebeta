@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     public User update(User entity) throws BatateException {
         Preconditions.checkNotNull(entity, MessageDictionary.OBJECT_IS_NULL);
         Preconditions.checkNotNull(entity.getUid(), MessageDictionary.OBJECT_ID_IS_NULL);
-        entity = findByUid(entity.getUid());
+        entity.setId(findByUid(entity.getUid()).getId());
         return userRepository.save(entity);
     }
 

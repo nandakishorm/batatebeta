@@ -27,7 +27,7 @@ public class UserFormLayout extends VerticalLayout {
     private UserService userService;
 
     private Button btnSave, btnReset;
-    private TextField txtFullName, txtUserName;
+    private TextField txtUid, txtFullName, txtUserName;
     private PasswordField pasPassword;
     private ComboBox cmbRole, cmbStatus;
 
@@ -46,12 +46,16 @@ public class UserFormLayout extends VerticalLayout {
             try {
                 if (clickEvent.getButton().getCaption().equalsIgnoreCase("save")) {
                     User user = new User();
+                    user.setUid(txtUid.getValue());
                     user.setFullName(txtFullName.getValue());
                     user.setUserName(txtUserName.getValue());
                     user.setPassword(pasPassword.getValue());
                     user.setStatus(Status.valueOf(cmbStatus.getValue().toString()));
                     user.setRole(Role.valueOf(cmbRole.getValue().toString()));
-                    user = userService.create(user);
+                    if (user.getUid().isEmpty())
+                        user = userService.create(user);
+                    else
+                        user = userService.update(user);
                     Notification.show("New user was created successfully");
                 } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("reset")) {
                     resetForm();
@@ -65,21 +69,25 @@ public class UserFormLayout extends VerticalLayout {
     }
 
     private void userFormLayoutInit() {
+        txtUid = new BatateTextField("UID");
+        txtUid.setVisible(false);
         txtFullName = new BatateTextField("FullName");
         txtUserName = new BatateTextField("UserName");
         pasPassword = new PasswordField("Password");
         pasPassword.setWidth("100%");
         cmbRole = new BatateComboBox("Role");
         cmbRole.addItems(Role.values());
+        cmbRole.setNullSelectionAllowed(false);
         cmbRole.select(Role.USER);
         cmbStatus = new BatateComboBox("Status");
-        cmbStatus.addItems(Status.values());
-        cmbStatus.select(Status.Active);
+        cmbStatus.addItems(Status.getValues());
+        cmbStatus.setNullSelectionAllowed(false);
+        cmbStatus.select(Status.ACTIVE);
         btnSave = new BatateButton("Save");
         btnReset = new BatateButton("Reset");
 
         FormLayout flUserLayout = new FormLayout(
-                txtFullName, txtUserName, pasPassword, cmbRole, cmbStatus
+                txtUid, txtFullName, txtUserName, pasPassword, cmbRole, cmbStatus
         );
         flUserLayout.setSizeFull();
         HorizontalLayout hlButtons = new HorizontalLayout(btnSave, btnReset);
@@ -97,6 +105,7 @@ public class UserFormLayout extends VerticalLayout {
     }
 
     public void loadRecord(User user) {
+        txtUid.setValue(user.getUid());
         txtFullName.setValue(user.getFullName());
         txtUserName.setValue(user.getUserName());
         pasPassword.setInputPrompt("xxxx");
@@ -105,6 +114,7 @@ public class UserFormLayout extends VerticalLayout {
     }
 
     public void resetForm() {
+        txtUid.setValue("");
         txtFullName.setValue("");
         txtUserName.setValue("");
         pasPassword.setInputPrompt("xxxx");

@@ -39,7 +39,7 @@ public class Dashboard extends VerticalLayout {
             if (clickEvent.getButton().getCaption().equalsIgnoreCase("users")) {
                 pnlDetailView.setContent(userViewLayout);
             } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("accounts")) {
-
+                pnlDetailView.setContent(new VerticalLayout());
             }
         };
         btnUser.addClickListener(clickListener);
@@ -68,7 +68,7 @@ public class Dashboard extends VerticalLayout {
         vlDetailViewContainer.setSizeFull();
 
         Image batateLogo = new Image("", new ThemeResource("potato.jpg"));
-        batateLogo.setHeight(70f, Unit.PIXELS);
+        batateLogo.setHeight(60f, Unit.PIXELS);
         batateLogo.setWidth(100f, Unit.PIXELS);
         batateLogo.setAlternateText("Batate");
         hlHeader = new HorizontalLayout(

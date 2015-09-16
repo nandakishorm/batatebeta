@@ -93,9 +93,10 @@ public class UserViewLayout extends VerticalLayout {
                     winUserFormContainer.setContent(userFormLayout);
                     UI.getCurrent().addWindow(winUserFormContainer);
                     winUserFormContainer.addCloseListener(windowCloseListener);
-                } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("update")) {
+                } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("delete")) {
                     Object selectedRow = tblUser.getValue();
                     userService.delete((User) selectedRow);
+                    reloadTable();
                     Notification.show("Record was successfully deleted");
                 }
             } catch (BatateException be) {
