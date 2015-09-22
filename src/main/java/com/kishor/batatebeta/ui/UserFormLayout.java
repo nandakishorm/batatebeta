@@ -12,6 +12,8 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import javax.annotation.PostConstruct;
 
@@ -24,12 +26,20 @@ import javax.annotation.PostConstruct;
 public class UserFormLayout extends VerticalLayout {
 
     @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private SimpleMailMessage simpleMailMessage;
+
+
+    @Autowired
     private UserService userService;
 
     private Button btnSave, btnReset;
     private TextField txtUid, txtFullName, txtUserName;
     private PasswordField pasPassword;
     private ComboBox cmbRole, cmbStatus;
+    private CheckBox chkSendEmailToAdmin;
 
     public UserFormLayout() {
     }
@@ -52,8 +62,14 @@ public class UserFormLayout extends VerticalLayout {
                     user.setPassword(pasPassword.getValue());
                     user.setStatus(Status.valueOf(cmbStatus.getValue().toString()));
                     user.setRole(Role.valueOf(cmbRole.getValue().toString()));
-                    if (user.getUid().isEmpty())
+                    if (user.getUid().isEmpty()) {
                         user = userService.create(user);
+                        if(chkSendEmailToAdmin.getValue()) {
+                            simpleMailMessage.setText("New user account was created successfully");
+                            simpleMailMessage.setSubject("Batate :: New user account creation");
+                            javaMailSender.send(simpleMailMessage);
+                        }
+                    }
                     else
                         user = userService.update(user);
                     Notification.show("New user was created successfully");
@@ -83,11 +99,13 @@ public class UserFormLayout extends VerticalLayout {
         cmbStatus.addItems(Status.getValues());
         cmbStatus.setNullSelectionAllowed(false);
         cmbStatus.select(Status.ACTIVE);
+        chkSendEmailToAdmin = new CheckBox("Send email notification to Admin");
+
         btnSave = new BatateButton("Save");
         btnReset = new BatateButton("Reset");
 
         FormLayout flUserLayout = new FormLayout(
-                txtUid, txtFullName, txtUserName, pasPassword, cmbRole, cmbStatus
+                txtUid, txtFullName, txtUserName, pasPassword, cmbRole, cmbStatus, chkSendEmailToAdmin
         );
         flUserLayout.setSizeFull();
         HorizontalLayout hlButtons = new HorizontalLayout(btnSave, btnReset);
@@ -111,6 +129,7 @@ public class UserFormLayout extends VerticalLayout {
         pasPassword.setInputPrompt("xxxx");
         cmbRole.setValue(user.getRole());
         cmbStatus.setValue(user.getStatus());
+        chkSendEmailToAdmin.setVisible(false);
     }
 
     public void resetForm() {
@@ -120,5 +139,6 @@ public class UserFormLayout extends VerticalLayout {
         pasPassword.setInputPrompt("xxxx");
         cmbRole.setValue(null);
         cmbStatus.setValue(null);
+        chkSendEmailToAdmin.setValue(false);
     }
 }
