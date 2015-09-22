@@ -12,10 +12,14 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import java.io.File;
 
 /**
  * Created by Nandakishor on 9/4/2015.
@@ -30,6 +34,9 @@ public class UserFormLayout extends VerticalLayout {
 
     @Autowired
     private SimpleMailMessage simpleMailMessage;
+
+    @Autowired
+    private MimeMessageHelper mimeMessageHelper;
 
 
     @Autowired
@@ -65,9 +72,14 @@ public class UserFormLayout extends VerticalLayout {
                     if (user.getUid().isEmpty()) {
                         user = userService.create(user);
                         if(chkSendEmailToAdmin.getValue()) {
-                            simpleMailMessage.setText("New user account was created successfully");
-                            simpleMailMessage.setSubject("Batate :: New user account creation");
-                            javaMailSender.send(simpleMailMessage);
+                            /*simpleMailMessage.setText("New user account was created successfully");
+                            simpleMailMessage.setSubject("Batate :: New user account creation");*/
+                            mimeMessageHelper.setSubject("Batate :: New user account creation");
+                            mimeMessageHelper.setText("<html><body>New user account was created successfully<br>" +
+                                    "<img src=''cid:identifier1234''></body></html>", true);
+                            FileSystemResource res = new FileSystemResource(new File("d:/Sample.jpg"));
+                            mimeMessageHelper.addInline("identifier1234", res);
+                            javaMailSender.send(mimeMessageHelper.getMimeMessage());
                         }
                     }
                     else
@@ -78,6 +90,8 @@ public class UserFormLayout extends VerticalLayout {
                 }
             } catch (BatateException be) {
                 be.printStackTrace();
+            } catch (MessagingException e) {
+                e.printStackTrace();
             }
         };
         btnSave.addClickListener(clickListener);

@@ -7,7 +7,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /**
@@ -69,5 +72,16 @@ public class EmailConfig {
         simpleMailMessage.setTo(emailTo);
         simpleMailMessage.setSubject(emailSubject);
         return simpleMailMessage;
+    }
+
+    @Bean
+    public MimeMessageHelper mimeMessageHelper() throws MessagingException {
+        JavaMailSenderImpl javaMailSender = (JavaMailSenderImpl) javaMailSender();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessageHelper.setFrom(emailFrom);
+        mimeMessageHelper.setTo(emailTo);
+        mimeMessageHelper.setSubject(emailSubject);
+        return mimeMessageHelper;
     }
 }
