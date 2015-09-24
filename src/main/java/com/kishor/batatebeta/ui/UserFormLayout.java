@@ -71,18 +71,18 @@ public class UserFormLayout extends VerticalLayout {
                     user.setRole(Role.valueOf(cmbRole.getValue().toString()));
                     if (user.getUid().isEmpty()) {
                         user = userService.create(user);
-                        if(chkSendEmailToAdmin.getValue()) {
+                        if (chkSendEmailToAdmin.getValue()) {
                             /*simpleMailMessage.setText("New user account was created successfully");
                             simpleMailMessage.setSubject("Batate :: New user account creation");*/
                             mimeMessageHelper.setSubject("Batate :: New user account creation");
-                            mimeMessageHelper.setText("<html><body>New user account was created successfully<br>" +
-                                    "<img src=''cid:identifier1234''></body></html>", true);
+                            mimeMessageHelper.setText(
+                                    "<html><body>New user account was created successfully<br>" +
+                                            "<img src=''cid:happyFace''><br></body></html>", true);
                             FileSystemResource res = new FileSystemResource(new File("d:/Sample.jpg"));
-                            mimeMessageHelper.addInline("identifier1234", res);
+                            mimeMessageHelper.addInline("happyFace", res);
                             javaMailSender.send(mimeMessageHelper.getMimeMessage());
                         }
-                    }
-                    else
+                    } else
                         user = userService.update(user);
                     Notification.show("New user was created successfully");
                 } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("reset")) {

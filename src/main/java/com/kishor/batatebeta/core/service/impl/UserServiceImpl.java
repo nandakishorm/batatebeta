@@ -28,6 +28,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User entity) throws BatateException {
         Preconditions.checkNotNull(entity, MessageDictionary.OBJECT_IS_NULL);
+        Preconditions.checkArgument(!entity.getUserName().isEmpty(), MessageDictionary.VALUE_IS_EMPTY);
+        Preconditions.checkArgument(!entity.getFullName().isEmpty(), MessageDictionary.VALUE_IS_EMPTY);
+        Preconditions.checkArgument(!entity.getPassword().isEmpty(), MessageDictionary.VALUE_IS_EMPTY);
         return userRepository.save(entity);
     }
 
