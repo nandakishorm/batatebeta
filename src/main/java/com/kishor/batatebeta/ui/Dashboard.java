@@ -1,6 +1,5 @@
 package com.kishor.batatebeta.ui;
 
-import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
@@ -67,7 +66,8 @@ public class Dashboard extends VerticalLayout {
         vlDetailViewContainer = new VerticalLayout();
         vlDetailViewContainer.setSizeFull();
 
-        Image batateLogo = new Image("", new ThemeResource("potato.jpg"));
+//        Image batateLogo = new Image("Logo", new ThemeResource("potato.jpg"));
+        Image batateLogo = new Image("Logo", null);
         batateLogo.setHeight(60f, Unit.PIXELS);
         batateLogo.setWidth(100f, Unit.PIXELS);
         batateLogo.setAlternateText("Batate");

@@ -55,6 +55,14 @@ public class UserController {
         return new ResponseEntity<>(userResource, HttpStatus.OK);
     }
 
+    /*Test method to get an error page*//*
+    @RequestMapping(value = "/users/error", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'ROLE_KISHOR')")
+    @ResponseBody
+    public String getErrorPage() throws BatateException {
+        return "pagenotfound";
+    }*/
+
     @RequestMapping(value = "/users/all", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'ROLE_KISHOR')")
     @ResponseBody
