@@ -20,6 +20,9 @@ public class User extends BaseEntity {
     @Column(name = "fullName", nullable = false)
     private String fullName;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "role", nullable = false, columnDefinition = "ENUM('ADMINISTRATOR', 'USER') default 'USER'")
     @Enumerated(EnumType.STRING)
     @Basic(fetch = FetchType.EAGER)
@@ -55,5 +58,13 @@ public class User extends BaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

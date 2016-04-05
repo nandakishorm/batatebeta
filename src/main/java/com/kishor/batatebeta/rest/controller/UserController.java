@@ -63,6 +63,14 @@ public class UserController {
         return "pagenotfound";
     }*/
 
+    /* TEST METHOD TO TEST CONTROLLER ADVICE CLASS */
+    @RequestMapping(value = "/controlleradvice", method = RequestMethod.PUT)
+    @PreAuthorize("hasAnyRole('USER', 'ADMINISTRATOR')")
+    @ResponseBody
+    public ResponseEntity<UserResource> checkControllerAdvice() throws BatateException {
+        throw new BatateException("BATATE TEST EXCEPTION:::::CONTROLLER ADVICE CLASS IS CALLED.");
+    }
+
     @RequestMapping(value = "/users/all", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'ROLE_KISHOR')")
     @ResponseBody

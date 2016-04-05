@@ -6,11 +6,9 @@ import com.kishor.batatebeta.exception.BatateException;
 import com.kishor.batatebeta.ui.extededComponents.BatateButton;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.*;
 
 import javax.annotation.PostConstruct;
 
@@ -83,6 +81,8 @@ public class UserViewLayout extends VerticalLayout {
                     winUserFormContainer.addCloseListener(windowCloseListener);
                 } else if (clickEvent.getButton().getCaption().equalsIgnoreCase("update")) {
                     Object selectedRow = tblUser.getValue();
+                    if (selectedRow == null)
+                        throw new BatateException("Please select record.");
                     winUserFormContainer = new Window("Update User");
                     winUserFormContainer.setWidth("50%");
                     winUserFormContainer.setHeight("40%");
@@ -125,12 +125,13 @@ public class UserViewLayout extends VerticalLayout {
         BeanItemContainer<User> userBeanItemContainer = new BeanItemContainer<>(User.class);
         userBeanItemContainer.addNestedContainerProperty("userName");
         userBeanItemContainer.addNestedContainerProperty("fullName");
+        userBeanItemContainer.addNestedContainerProperty("email");
         userBeanItemContainer.addNestedContainerProperty("role");
         userBeanItemContainer.addNestedContainerProperty("status");
         userBeanItemContainer.addAll(userService.findAll());
         tblUser.setContainerDataSource(userBeanItemContainer);
-        tblUser.setVisibleColumns("userName","fullName","role","status");
-        tblUser.setColumnHeaders("Username","Full name","Role","Status");
+        tblUser.setVisibleColumns("userName","fullName","email","role","status");
+        tblUser.setColumnHeaders("Username","Full name","Email","Role","Status");
     }
 
     private void userViewLayoutInit() {

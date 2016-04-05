@@ -8,6 +8,7 @@ import com.kishor.batatebeta.exception.BatateException;
 import com.kishor.batatebeta.ui.extededComponents.BatateButton;
 import com.kishor.batatebeta.ui.extededComponents.BatateComboBox;
 import com.kishor.batatebeta.ui.extededComponents.BatateTextField;
+import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class UserFormLayout extends VerticalLayout {
     private UserService userService;
 
     private Button btnSave, btnReset;
-    private TextField txtUid, txtFullName, txtUserName;
+    private TextField txtUid, txtFullName, txtUserName, txtEmail;
     private PasswordField pasPassword;
     private ComboBox cmbRole, cmbStatus;
     private CheckBox chkSendEmailToAdmin;
@@ -65,6 +66,11 @@ public class UserFormLayout extends VerticalLayout {
                     User user = new User();
                     user.setUid(txtUid.getValue());
                     user.setFullName(txtFullName.getValue());
+                    if (!txtEmail.isValid()) {
+                        Notification.show("Invalid input","Please enter valid inputs", Notification.Type.TRAY_NOTIFICATION);
+                        return;
+                    }
+                    user.setEmail(txtEmail.getValue());
                     user.setUserName(txtUserName.getValue());
                     user.setPassword(pasPassword.getValue());
                     user.setStatus(Status.valueOf(cmbStatus.getValue().toString()));
@@ -103,6 +109,9 @@ public class UserFormLayout extends VerticalLayout {
         txtUid.setVisible(false);
         txtFullName = new BatateTextField("FullName");
         txtUserName = new BatateTextField("UserName");
+        txtEmail = new BatateTextField("Email");
+        txtEmail.addValidator(new EmailValidator("Invalid email id !!!"));
+        txtEmail.setImmediate(true);
         pasPassword = new PasswordField("Password");
         pasPassword.setWidth("100%");
         cmbRole = new BatateComboBox("Role");
@@ -119,7 +128,7 @@ public class UserFormLayout extends VerticalLayout {
         btnReset = new BatateButton("Reset");
 
         FormLayout flUserLayout = new FormLayout(
-                txtUid, txtFullName, txtUserName, pasPassword, cmbRole, cmbStatus, chkSendEmailToAdmin
+                txtUid, txtFullName, txtEmail, txtUserName, pasPassword, cmbRole, cmbStatus, chkSendEmailToAdmin
         );
         flUserLayout.setSizeFull();
         HorizontalLayout hlButtons = new HorizontalLayout(btnSave, btnReset);
@@ -139,6 +148,7 @@ public class UserFormLayout extends VerticalLayout {
     public void loadRecord(User user) {
         txtUid.setValue(user.getUid());
         txtFullName.setValue(user.getFullName());
+        txtEmail.setValue(user.getEmail());
         txtUserName.setValue(user.getUserName());
         pasPassword.setInputPrompt("xxxx");
         cmbRole.setValue(user.getRole());
@@ -150,6 +160,7 @@ public class UserFormLayout extends VerticalLayout {
         txtUid.setValue("");
         txtFullName.setValue("");
         txtUserName.setValue("");
+        txtEmail.setValue("");
         pasPassword.setInputPrompt("xxxx");
         cmbRole.setValue(null);
         cmbStatus.setValue(null);
