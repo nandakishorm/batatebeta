@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .authorizeRequests().anyRequest().fullyAuthenticated()
                 .and()
-                .formLogin()
+                .formLogin().defaultSuccessUrl("/dash")
                 .and()
                 .logout().invalidateHttpSession(true).logoutUrl("/applogout");
 

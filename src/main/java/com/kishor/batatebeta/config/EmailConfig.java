@@ -74,6 +74,7 @@ public class EmailConfig {
         return simpleMailMessage;
     }
 
+    // This class is similar to SimpleMailMessage class, but offers some better methods.
     @Bean
     public MimeMessageHelper mimeMessageHelper() throws MessagingException {
         JavaMailSenderImpl javaMailSender = (JavaMailSenderImpl) javaMailSender();

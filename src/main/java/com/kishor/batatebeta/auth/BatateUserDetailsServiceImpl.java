@@ -1,5 +1,6 @@
 package com.kishor.batatebeta.auth;
 
+import com.kishor.batatebeta.core.dictionary.Status;
 import com.kishor.batatebeta.core.domain.User;
 import com.kishor.batatebeta.core.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class BatateUserDetailsServiceImpl implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
 
         org.springframework.security.core.userdetails.User userDetails =
-                new org.springframework.security.core.userdetails.User(username, user.getPassword(), true, true, true, true, authorities);
+                new org.springframework.security.core.userdetails.User(username, user.getPassword(), user.getStatus().equals(Status.ACTIVE), true, true, true, authorities);
 
         return userDetails;
     }
