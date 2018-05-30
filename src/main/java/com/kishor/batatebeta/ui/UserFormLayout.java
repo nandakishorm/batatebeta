@@ -3,6 +3,7 @@ package com.kishor.batatebeta.ui;
 import com.kishor.batatebeta.core.dictionary.Role;
 import com.kishor.batatebeta.core.dictionary.Status;
 import com.kishor.batatebeta.core.domain.User;
+import com.kishor.batatebeta.core.service.BatateMailSenderService;
 import com.kishor.batatebeta.core.service.UserService;
 import com.kishor.batatebeta.exception.BatateException;
 import com.kishor.batatebeta.ui.extededComponents.BatateButton;
@@ -31,14 +32,7 @@ import java.io.File;
 public class UserFormLayout extends VerticalLayout {
 
     @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    private SimpleMailMessage simpleMailMessage;
-
-    @Autowired
-    private MimeMessageHelper mimeMessageHelper;
-
+    private BatateMailSenderService batateMailSenderService;
 
     @Autowired
     private UserService userService;
@@ -61,6 +55,7 @@ public class UserFormLayout extends VerticalLayout {
 
     private void configureComponentListeners() {
         Button.ClickListener clickListener = clickEvent -> {
+            boolean mailSenderStatus;
             try {
                 if (clickEvent.getButton().getCaption().equalsIgnoreCase("save")) {
                     User user = new User();
@@ -78,15 +73,9 @@ public class UserFormLayout extends VerticalLayout {
                     if (user.getUid().isEmpty()) {
                         user = userService.create(user);
                         if (chkSendEmailToAdmin.getValue()) {
-                            /*simpleMailMessage.setText("New user account was created successfully");
-                            simpleMailMessage.setSubject("Batate :: New user account creation");*/
-                            mimeMessageHelper.setSubject("Batate :: New user account creation");
-                            mimeMessageHelper.setText(
-                                    "<html><body>New user account was created successfully<br>" +
-                                            "<img src=''cid:happyFace''><br></body></html>", true);
-                            FileSystemResource res = new FileSystemResource(new File("d:/Sample.jpg"));
-                            mimeMessageHelper.addInline("happyFace", res);
-                            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+                            mailSenderStatus = batateMailSenderService.sendMailCreateUser();
+                            if(!mailSenderStatus)
+                                Notification.show("Unable to send user creation email", Notification.Type.WARNING_MESSAGE);
                         }
                     } else
                         user = userService.update(user);
@@ -96,8 +85,6 @@ public class UserFormLayout extends VerticalLayout {
                 }
             } catch (BatateException be) {
                 be.printStackTrace();
-            } catch (MessagingException e) {
-                e.printStackTrace();
             }
         };
         btnSave.addClickListener(clickListener);
