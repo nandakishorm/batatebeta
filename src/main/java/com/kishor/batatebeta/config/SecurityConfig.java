@@ -22,6 +22,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @ComponentScan(basePackages = "com.kishor.batatebeta.auth", scopedProxy = ScopedProxyMode.INTERFACES)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /* Go for qualifiers when you have more than one implementations for an interface or API and you want to tell spring to
+    * autowire a particular implementation. In the line below the BatateUserDetailsServiceImpl class has an implementation for
+    * UserDetailsService, and need not necessarily have a qualifier as there is only implementation. */
     @Autowired
     @Qualifier("batateUserDetailsServiceImpl")
     private UserDetailsService userDetailsService;
