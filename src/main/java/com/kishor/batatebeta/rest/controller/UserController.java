@@ -63,7 +63,7 @@ public class UserController {
         return "pagenotfound";
     }*/
 
-    /* TEST METHOD TO TEST CONTROLLER ADVICE CLASS */
+    /* TEST METHOD TO TEST CONTROLLER ADVICE CLASS and it is working fine */
     @RequestMapping(value = "/controlleradvice", method = RequestMethod.PUT)
     @PreAuthorize("hasAnyRole('USER', 'ADMINISTRATOR')")
     @ResponseBody
