@@ -1,6 +1,9 @@
 package com.kishor.batatebeta.core.domain;
 
 import com.kishor.batatebeta.core.dictionary.Role;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -8,6 +11,9 @@ import javax.persistence.*;
  * Created by Nandakishor on 8/11/2015.
  */
 
+@Data
+@NoArgsConstructor
+@ToString
 @Entity
 public class User extends BaseEntity {
 
@@ -27,44 +33,4 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Basic(fetch = FetchType.EAGER)
     private Role role;
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
